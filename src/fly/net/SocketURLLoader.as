@@ -84,6 +84,7 @@ package fly.net
 		private var _contentIsChunked_bool:Boolean;
 		
 		private var _data:*;
+		private var _responseHeaders_arr:Array;
 		private var _bytesLoaded_uint:uint;
 		private var _bytesTotal_uitn:uint;
 
@@ -215,6 +216,8 @@ package fly.net
 				_headerFound_bool = true;
 				
 				var header:HTTPResponseHeader = new HTTPResponseHeader(data_str.substr(0, headerEndIndex_int));
+
+				_responseHeaders_arr = header.headers;
 
 				var httpStatusEvent:HTTPStatusEvent = new HTTPStatusEvent(HTTPStatusEvent.HTTP_STATUS, false, false, header.status);
 				dispatchEvent(httpStatusEvent);
@@ -460,6 +463,17 @@ package fly.net
 		public function get data():*
 		{
 			return _data;
+		};
+		
+		/**
+		 * Will contain the response headers as soon as the complete event has been dispatched.
+		 * This array will contain instances of URLRequestHeader.
+		 * 
+		 * @see flash.net.URLRequestHeader
+		 */
+		public function get responseHeaders():Array
+		{
+			return _responseHeaders_arr;
 		};
 	};
 };
