@@ -1,4 +1,4 @@
-package fly.net
+package code.google.as3httpclient
 {
 	/**
 	 * The HTTP line separator, used in http requests and responses

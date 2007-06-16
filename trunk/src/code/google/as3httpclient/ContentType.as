@@ -1,4 +1,4 @@
-package fly.net
+package code.google.as3httpclient
 {
 	/**
 	 * Contains HTTP request content types
