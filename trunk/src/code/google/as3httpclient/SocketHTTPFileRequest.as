@@ -7,7 +7,7 @@ package code.google.as3httpclient
 	/**
 	 * This type of request allows you to upload a file using the SocketURLLoader.
 	 * 
-	 * @see fly.net.SocketURLLoader
+	 * @see SocketURLLoader
 	 */
 	public class SocketHTTPFileRequest extends SocketHTTPRequest
 	{
@@ -29,6 +29,8 @@ package code.google.as3httpclient
 		/**
 		 * Defaults the method to URLRequestMethod.POST and the contentType to
 		 * ContentType.MULTIPART_FORM_DATA
+		 * 
+		 * @see ContentType
 		 */
 		public function SocketHTTPFileRequest(url_str:String = null)
 		{
@@ -41,7 +43,7 @@ package code.google.as3httpclient
 		/**
 		 * Will construct the data containing the file information.
 		 * 
-		 * @see fly.net.SocketHTTPRequest.data
+		 * @see SocketHTTPRequest#data
 		 * 
 		 * @throws Error if one of the following fields is empty: fileName, dataField, fileContent
 		 * @throws ArgumentError is the data is not of type URLVariables

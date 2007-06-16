@@ -11,8 +11,8 @@ package code.google.as3httpclient
 	 * which is the reason that this class exists. It will extract more information from the url
 	 * then the normal URLRequest.
 	 * 
-	 * @see fly.net.SocketURLLoader
-	 * @see flash.net.URLRequest
+	 * @see SocketURLLoader
+	 * @see http://livedocs.adobe.com/flex/2/langref/flash/net/URLRequest.html flash.net.URLRequest
 	 */
 	public class SocketHTTPRequest
 	{
@@ -39,7 +39,7 @@ package code.google.as3httpclient
 		/**
 		 * The contentType of the request, the default value is ContentType.APPLICATION_X_WWW_FORM_URLENCODED
 		 * 
-		 * @see fly.net.ContentType
+		 * @see ContentType
 		 */
 		public var contentType:String;
 		
@@ -51,27 +51,26 @@ package code.google.as3httpclient
 		public var requestHeaders:Array;
 		
 		/**
-		 * The given data will be handled differently depending on a few variables.
-		 * 
+		 * The given data will be handled differently depending on a few variables.<br />
+		 * <br />
 		 * If method is set to POST and contentType is set to ContentType.APPLICATION_X_WWW_FORM_URLENCODED:
 		 * If data is ByteArray it will be written as is to the request, else the toString() method will 
-		 * be called and the result will be written to the request.
-		 * 
-		 * If method is set to POST and contentType is set to ContentType.MULTIPART_FORM_DATA:
+		 * be called and the result will be written to the request.<br />
+		 * <br />
+		 * If method is set to POST and contentType is set to ContentType.MULTIPART_FORM_DATA:<br />
 		 * If data is URLVariables it will create a part for each entry. This part will look 
-		 * like this:
-		 * 
-		 * "--{separator}"
-		 * Content-Disposition: form-data; name="{urlVariableName}"
-		 * {content}
-		 * 
-		 * {separator} will be replaced by the separator.
-		 * {urlVariableName} will be replaced by the name of the the URLVariables entry.
+		 * like this:<br />
+		 * <br />
+		 * "--{separator}"<br />
+		 * Content-Disposition: form-data; name="{urlVariableName}"<br />
+		 * {content}<br />
+		 * <br />
+		 * {separator} will be replaced by the separator.<br />
+		 * {urlVariableName} will be replaced by the name of the the URLVariables entry.<br />
 		 * {content} will be replaced by the data. If data is ByteArray it will be written directly, 
-		 * 			 else the toString() method will be called and the result will be written.
-		 * 
-		 * @see flash.utils.ByteArray
-		 * @see flash.net.URLVariables		
+		 * 			 else the toString() method will be called and the result will be written.<br />
+		 * @see http://livedocs.adobe.com/flex/2/langref/flash/utils/ByteArray.html flash.utils.ByteArray
+		 * @see http://livedocs.adobe.com/flex/2/langref/flash/net/URLVariables.html flash.net.URLVariables
 		 * 
 		 * @throws ArgumentError Is thrown when method is POST,ContentType.MULTIPART_FORM_DATA and the data
 		 * 						 is NOT of type URLVariables.
@@ -92,13 +91,12 @@ package code.google.as3httpclient
 		private var _extendedURL_str:String;
 		
 		/**
-		 * Creates a new SocketHTTPRequest.
+		 * Creates a new SocketHTTPRequest.<br />
 		 * Defeaults the method to URLRequestMethod.GET and contentType to 
-		 * ContentType.APPLICATION_X_WWW_FORM_URLENCODED.
-		 * 
+		 * ContentType.APPLICATION_X_WWW_FORM_URLENCODED.<br />
+		 * <br />
 		 * Note that the SocketHTTPRequest currently only supports urls that start 
-		 * with HTTP.
-		 * 
+		 * with http://.<br />
 		 * @param url_str If given it will be passed to the url setter.
 		 */
 		public function SocketHTTPRequest(url_str:String = null)
@@ -211,7 +209,7 @@ package code.google.as3httpclient
 		 * This method will construct the request and return it as a ByteArray. This 
 		 * ByteArray can be used directly to make the request on the socket.
 		 * 
-		 * @see flash.utils.ByteArray
+		 * @see http://livedocs.adobe.com/flex/2/langref/flash/utils/ByteArray.html flash.utils.ByteArray
 		 */
 		public function constructRequest():ByteArray
 		{
@@ -339,7 +337,7 @@ package code.google.as3httpclient
 		 * This method constructs the data that is send with the request. More information on 
 		 * how data is handled can be found at the data property.
 		 * 
-		 * @see data
+		 * @see #data
 		 */
 		protected function __constructData(boundary_str:String):ByteArray
 		{
@@ -418,7 +416,7 @@ package code.google.as3httpclient
 		 * The method of the request. The default method is GET, valid values are 
 		 * URLRequestMethod.GET and URLRequestMethod.POST.
 		 * 
-		 * @see flash.net.URLRequestMethod
+		 * @see http://livedocs.adobe.com/flex/2/langref/flash/net/URLRequestMethod.html flash.net.URLRequestMethod
 		 * 
 		 * @throws ArgumentError is the given method is not valid.
 		 */
@@ -447,9 +445,9 @@ package code.google.as3httpclient
 		};	
 		
 		/**
-		 * Gives the baseURL from the url, this could be seen as the server name.
-		 * 
-		 * http://www.mywebsite.com:8080/test/?id=100 will result in www.mywebsite.com
+		 * Gives the baseURL from the url, this could be seen as the server name.<br />
+		 * <br />
+		 * <code>http://www.mywebsite.com:8080/test/?id=100</code> will result in <code>www.mywebsite.com</code>
 		 * as base url.
 		 */
 		public function get baseURL():String
@@ -459,9 +457,9 @@ package code.google.as3httpclient
 		
 		/**
 		 * Gives the extendedURL from the url, this is all extra information besides the
-		 * server and port
-		 * 
-		 * http://www.mywebsite.com:8080/test/?id=100 will result in /test/?id=100
+		 * server and port<br />
+		 * <br />
+		 * <code>http://www.mywebsite.com:8080/test/?id=100</code> will result in <code>/test/?id=100</code>
 		 * as extended url.
 		 */
 		public function get extendedURL():String

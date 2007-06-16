@@ -52,22 +52,23 @@ package code.google.as3httpclient
 	[Event(name="httpStatus", type="flash.events.HTTPStatusEvent")]
 
 	/**
-	 * This class can in most cases be used as a replacement for the URLLoader class.
-	 * It allows you to do things that are not possible with the URLLoader class:
-	 * 
-	 * - Authenticating without showing an authentication window on each request
-	 * - Adding request headers that are not forbidden by the URLLoader class
-	 * - Uploading files to a server that uses http authentication
-	 * - Copying bytes (for example from images downloaded using this loader)
-	 * 
+	 * This class can in most cases be used as a replacement for the URLLoader class. <br />
+	 * <br />
+	 * It allows you to do things that are not possible with the URLLoader class:<br />
+	 * <ul>
+	 * 		<li>Authenticating without showing an authentication window on each request</li>
+	 * 		<li>Adding request headers that are forbidden by the URLLoader class</li>
+	 * 		<li>Uploading files to a server that uses http authentication</li>
+	 * 		<li>Copying bytes (for example from images downloaded using this loader)</li>
+	 * </ul>
+	 * <br />
 	 * Note that to authenticate you need to include an authentication header. An 
-	 * authentication header looks like this:
-	 * 
-	 * "Authorization: Basic" + Base64.encode(username + ":" + password))
-	 * 
+	 * authentication header looks like this:<br />
+	 * <br />
+	 * "Authorization: Basic" + Base64.encode(username + ":" + password))<br />
+	 * <br />
 	 * If the data from the server does not contain a Content-Length header and the 
 	 * Transfer-Encoding header is not set to chunked, results will be unexpected.
-	 * 
 	 */
 	public class SocketURLLoader extends EventDispatcher
 	{
@@ -90,7 +91,7 @@ package code.google.as3httpclient
 		/**
 		 * The format of the data that is retrieved from the request.
 		 * 
-		 * @see flash.net.URLLoaderDataFormat
+		 * @see http://livedocs.adobe.com/flex/2/langref/flash/net/URLLoaderDataFormat.html flash.net.URLLoaderDataFormat
 		 */
 		public var dataFormat:String;
 		
@@ -98,7 +99,7 @@ package code.google.as3httpclient
 		 * The reqeust is given to the load method if given. Defaults the dataFormat
 		 * property to URLLoaderDataFormat.TEXT.
 		 * 
-		 * @see load
+		 * @see #load()
 		 */
 		public function SocketURLLoader(request:Object = null)
 		{
@@ -119,11 +120,11 @@ package code.google.as3httpclient
 		
 		/**
 		 * If the given request is of type URLRequest, the reqeust is converted to an instance of 
-		 * SocketHTTPRequest.
-		 * 
-		 * If the socket is still open it will close the socket.
-		 * 
-		 * If no port could be extraced from the url, port 80 is used.
+		 * SocketHTTPRequest.<br />
+		 * <br />
+		 * If the socket is still open it will close the socket.<br />
+		 * <br />
+		 * If no port could be extraced from the url, port 80 is used.<br />
 		 * 
 		 * @param request An instance of URLRequest, SocketHTTPRequest or SocketHTTPFileRequest.
 		 * 
@@ -468,7 +469,7 @@ package code.google.as3httpclient
 		 * Will contain the response headers as soon as the complete event has been dispatched.
 		 * This array will contain instances of URLRequestHeader.
 		 * 
-		 * @see flash.net.URLRequestHeader
+		 * @see http://livedocs.adobe.com/flex/2/langref/flash/net/URLRequestHeader.html flash.net.URLRequestHeader
 		 */
 		public function get responseHeaders():Array
 		{
