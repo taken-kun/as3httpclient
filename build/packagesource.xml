@@ -51,6 +51,9 @@
 		<copy todir="${build.dir}lib/">
 			<fileset dir="../lib/"/>
 		</copy>
+		<copy todir="${build.dir}docs/">
+			<fileset dir="../docs/"/>
+		</copy>
 		<copy todir="${build.dir}src/">
 			<!-- exclude bin dir, files and dirs with a period-->
 			<fileset dir="../src/" excludes="**/bin/**, **/\.**, **/\.*/**" />

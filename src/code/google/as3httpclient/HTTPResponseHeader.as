@@ -5,7 +5,7 @@ package code.google.as3httpclient
 	/**
 	 * This class is used by the SocketURLLoader to parse the HTTP response header
 	 * 
-	 * @see fly.net.SocketURLLoader
+	 * @see SocketURLLoader
 	 */
 	public class HTTPResponseHeader
 	{
@@ -78,7 +78,7 @@ package code.google.as3httpclient
 		/**
 		 * Contains an array of URLRequestHeaders.
 		 * 
-		 * @see flash.net.URLRequestHeader
+		 * @see http://livedocs.adobe.com/flex/2/langref/flash/net/URLRequestHeader.html flash.net.URLRequestHeader
 		 */
 		public function get headers():Array
 		{
@@ -87,8 +87,8 @@ package code.google.as3httpclient
 		
 		/**
 		 * This object contains all headers as a hash / lookup table. They are 
-		 * inserted with the header name as key and header value as value.
-		 * 
+		 * inserted with the header name as key and header value as value.<br />
+		 * <br />
 		 * Note that if a header with the same name is found more then once it will 
 		 * overwrite the previously set one.
 		 */
