@@ -1,4 +1,4 @@
-package fly.net
+package code.google.as3httpclient
 {
 	import flash.events.EventDispatcher;
 	import flash.net.Socket;
@@ -11,7 +11,6 @@ package fly.net
 	import flash.events.SecurityErrorEvent;
 	import flash.events.HTTPStatusEvent;
 	import flash.net.URLVariables;
-	import fly.net.HTTP_SEPARATOR;
 	import flash.errors.IOError;
 
 	/**

@@ -1,4 +1,4 @@
-package fly.net
+package code.google.as3httpclient
 {
 	import flash.net.URLRequestHeader;
 	
