@@ -216,7 +216,6 @@ package code.google.as3httpclient
 				_headerFound_bool = true;
 				
 				var header:HTTPResponseHeader = new HTTPResponseHeader(data_str.substr(0, headerEndIndex_int));
-
 				_responseHeaders_arr = header.headers;
 
 				var httpStatusEvent:HTTPStatusEvent = new HTTPStatusEvent(HTTPStatusEvent.HTTP_STATUS, false, false, header.status);
@@ -313,20 +312,24 @@ package code.google.as3httpclient
 			
 			if (!_contentLength_num)
 			{
-				//we are done, convert the data
-				_data.position = 0;
-				switch (dataFormat)
+				//_data might be empty if the contentLength was 0 from the start
+				if (_data)
 				{
-					default:
-					case URLLoaderDataFormat.TEXT:
-						_data = _data.readUTFBytes(_data.bytesAvailable);
-						break;
-					case URLLoaderDataFormat.VARIABLES:
-						_data = new URLVariables(_data.readUTFBytes(_data.bytesAvailable));
-						break;
-					case URLLoaderDataFormat.BINARY:
-						//do nothing, the data is allready binary
-						break;
+					//we are done, convert the data
+					_data.position = 0;
+					switch (dataFormat)
+					{
+						default:
+						case URLLoaderDataFormat.TEXT:
+							_data = _data.readUTFBytes(_data.bytesAvailable);
+							break;
+						case URLLoaderDataFormat.VARIABLES:
+							_data = new URLVariables(_data.readUTFBytes(_data.bytesAvailable));
+							break;
+						case URLLoaderDataFormat.BINARY:
+							//do nothing, the data is allready binary
+							break;
+					};
 				};
 				
 				var completeEvent:Event = new Event(Event.COMPLETE);
