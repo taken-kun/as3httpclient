@@ -29,12 +29,12 @@ package code.google.as3httpclient
 			if (request.contentType)
 			{
 				instance.contentType = request.contentType;
-			};
+			}
 			instance.method = request.method;
 			instance.requestHeaders = request.requestHeaders;
 			
 			return instance;
-		};
+		}
 		
 		/**
 		 * The contentType of the request, the default value is ContentType.APPLICATION_X_WWW_FORM_URLENCODED
@@ -89,10 +89,12 @@ package code.google.as3httpclient
 		private var _port_int:int;
 		private var _baseURL_str:String;
 		private var _extendedURL_str:String;
+
+		private var _userAgent:String = "as3httpclient";
 		
 		/**
 		 * Creates a new SocketHTTPRequest.<br />
-		 * Defeaults the method to URLRequestMethod.GET and contentType to 
+		 * Defeaults the method to SocketURLRequestMethod.GET and contentType to 
 		 * ContentType.APPLICATION_X_WWW_FORM_URLENCODED.<br />
 		 * <br />
 		 * Note that the SocketHTTPRequest currently only supports urls that start 
@@ -103,12 +105,12 @@ package code.google.as3httpclient
 		{
 			requestHeaders = new Array();
 			contentType = ContentType.APPLICATION_X_WWW_FORM_URLENCODED;
-			method = URLRequestMethod.GET;
+			method = SocketURLRequestMethod.GET;
 			if (url_str)
 			{
 				url = url_str;
-			};
-		};
+			}
+		}
 		
 		private function _parseURL():void
 		{
@@ -136,7 +138,7 @@ package code.google.as3httpclient
 				} else
 				{
 					authenticationEnd_int = 7;
-				};
+				}
 				
 				/*
 					Find the start of the port
@@ -155,9 +157,9 @@ package code.google.as3httpclient
 					if (portEnd_int == -1)
 					{
 						portEnd_int = url_str.length;
-					};
+					}
 					_port_int = parseInt(url_str.substring(portStart_int + 1, portEnd_int));
-				};
+				}
 				
 				/*
 					The next if statement will extract the base url and set the extendedURLStart_int
@@ -174,7 +176,7 @@ package code.google.as3httpclient
 					if (extendedURLStart_int == -1)
 					{
 						extendedURLStart_int = url_str.length;
-					};
+					}
 					
 					_baseURL_str = url_str.substring(authenticationEnd_int + 1, extendedURLStart_int);
 				} else if (hasPort_bool)
@@ -187,10 +189,10 @@ package code.google.as3httpclient
 					if (extendedURLStart_int == -1)
 					{
 						extendedURLStart_int = url_str.length;
-					};
+					}
 					
 					_baseURL_str = url_str.substring(7, extendedURLStart_int);				
-				};
+				}
 				
 				/* 
 					if the extendedURLStart_int is smaller then the total url, get it from the url
@@ -198,12 +200,12 @@ package code.google.as3httpclient
 				if (extendedURLStart_int > -1 && extendedURLStart_int < url_str.length)
 				{
 					_extendedURL_str = url_str.substr(extendedURLStart_int);
-				};
+				}
 			} else
 			{
 				throw new Error("SocketHTTPRequest: could not parse url, the url did not start with 'http://', this feature is not implemented yet");
-			};
-		};
+			}
+		}
 		
 		/**
 		 * This method will construct the request and return it as a ByteArray. This 
@@ -217,7 +219,7 @@ package code.google.as3httpclient
 				If the method is POST, call both __constructHeader and __constrcutData methods.
 			*/
 			
-			var methodIsPost_bool:Boolean = (method == URLRequestMethod.POST);
+			var methodIsPost_bool:Boolean = (method == SocketURLRequestMethod.POST) || (method == SocketURLRequestMethod.PUT);
 			
 			var requestBA:ByteArray;
 			if (methodIsPost_bool)
@@ -233,17 +235,17 @@ package code.google.as3httpclient
 				if (contentType == ContentType.MULTIPART_FORM_DATA)
 				{
 					contentLength_num -= 4;
-				};
+				}
 				requestBA = __constructHeader(contentLength_num, boundary_str);
 				//add data
 				requestBA.writeBytes(dataBA, 0, dataBA.length);
 			} else
 			{
 				requestBA = __constructHeader(0, null);
-			};
+			}
 			
 			return requestBA;
-		};
+		}
 		
 		/**
 		 * This method constructs the header of the request.
@@ -260,15 +262,15 @@ package code.google.as3httpclient
 			*/
 			var extendedUrl_str:String = extendedURL ? extendedURL : "/";
 			
-			if (method == URLRequestMethod.GET && data)
+			if ((method == SocketURLRequestMethod.GET || method == SocketURLRequestMethod.HEAD || method == SocketURLRequestMethod.DELETE) && data)
 			{
 				if (extendedUrl_str.indexOf("?") == -1)
 				{
 					extendedUrl_str += "?";
-				};
+				}
 				
 				extendedUrl_str += data.toString();
-			};
+			}
 			
 			/*
 				Create the first line of the header
@@ -276,12 +278,17 @@ package code.google.as3httpclient
 			header_str += method + " " + extendedUrl_str + " HTTP/1.1" + HTTP_SEPARATOR;
 
 			/*
+				Add user-agent header
+			*/
+			header_str += "User-Agent: " + _userAgent + HTTP_SEPARATOR;
+
+			/*
 				If a content length is given, add the request header for it
 			*/
 			if (contentLength_num)
 			{
 				header_str += "Content-Length: " + contentLength_num + HTTP_SEPARATOR;
-			};
+			}
 			
 			/*
 				Add the content type
@@ -289,7 +296,7 @@ package code.google.as3httpclient
 			if (contentType)
 			{
 				header_str += "Content-Type: " + contentType;
-			};
+			}
 			
 			/*
 				If the content type is of multipart, add a boundary
@@ -297,7 +304,7 @@ package code.google.as3httpclient
 			if (contentType == ContentType.MULTIPART_FORM_DATA)
 			{
 				header_str += "; boundary=" + boundary_str;
-			};
+			}
 			header_str += HTTP_SEPARATOR;
 
 			/*
@@ -309,8 +316,8 @@ package code.google.as3httpclient
 				for each (requestHeader in requestHeaders)
 				{
 					header_str += requestHeader.name + ": " + requestHeader.value + HTTP_SEPARATOR;
-				};
-			};
+				}
+			}
 			
 			/*
 				Add the host of the request
@@ -319,7 +326,7 @@ package code.google.as3httpclient
 			if (port)
 			{
 				serverURL_str += ":" + port;
-			};			
+			}			
 			header_str += "Host: " + serverURL_str + HTTP_SEPARATOR;
 			
 			/*
@@ -331,7 +338,7 @@ package code.google.as3httpclient
 			headerBA.writeUTFBytes(header_str);
 			
 			return headerBA;
-		};
+		}
 		
 		/**
 		 * This method constructs the data that is send with the request. More information on 
@@ -357,7 +364,7 @@ package code.google.as3httpclient
 						} else
 						{
 							dataBA.writeUTFBytes(data.toString());
-						};
+						}
 						
 						break;
 					case ContentType.MULTIPART_FORM_DATA:
@@ -380,22 +387,22 @@ package code.google.as3httpclient
 								} else
 								{
 									dataBA.writeUTFBytes(value.toString());
-								};
+								}
 								dataBA.writeUTFBytes(HTTP_SEPARATOR);
-							};							
+							}							
 							dataBA.writeUTFBytes("--" + boundary_str + "--" + HTTP_SEPARATOR);
 						} else
 						{
 							throw new ArgumentError("SocketHTTPRequest: cannot create data stream when content type is set to MULTIPART_FORM_DATA and data is not of type URLVariables");
-						};
+						}
 					
 						break;
 					
-				};
-			};
+				}
+			}
 			
 			return dataBA;			
-		};
+		}
 		
 		/**
 		 * The url of the request. Note that currently only url's which start with http://
@@ -404,37 +411,40 @@ package code.google.as3httpclient
 		public function get url():String
 		{
 			return _url_str;
-		};
+		}
 		
 		public function set url(url_str:String):void
 		{
 			_url_str = url_str;
 			_parseURL();
-		};
+		}
 		
 		/**
 		 * The method of the request. The default method is GET, valid values are 
-		 * URLRequestMethod.GET and URLRequestMethod.POST.
+		 * SocketURLRequestMethod.DELETE, SocketURLRequestMethod.GET, SocketURLRequestMethod.HEAD, SocketURLRequestMethod.OPTIONS,
+		 * URLRequestMethod.POST and SocketURLRequestMethod.TRACE
 		 * 
-		 * @see http://livedocs.adobe.com/flex/2/langref/flash/net/URLRequestMethod.html flash.net.URLRequestMethod
+		 * @see #code.google.as3httpclient.SocketURLRequestMethod
 		 * 
 		 * @throws ArgumentError is the given method is not valid.
 		 */
 		public function get method():String
 		{
 			return _method_str;
-		};
+		}
 		
 		public function set method(method_str:String):void
 		{
-			if (method_str == URLRequestMethod.GET || method_str == URLRequestMethod.POST)
+			if (method_str == SocketURLRequestMethod.GET || method_str == SocketURLRequestMethod.POST
+				|| method_str == SocketURLRequestMethod.PUT || SocketURLRequestMethod.DELETE || SocketURLRequestMethod.HEAD
+				|| method_str == SocketURLRequestMethod.OPTIONS || method_str == SocketURLRequestMethod.TRACE)			
 			{
 				_method_str = method_str;
 			} else
 			{
-				throw new ArgumentError("SocketHTTPRequest: invalid method given, use values stored in the URLRequestMethod class");
-			};
-		};
+				throw new ArgumentError("SocketHTTPRequest: invalid method given, use values stored in the SocketURLRequestMethod class");
+			}
+		}
 		
 		/**
 		 * Gives the port from the URL
@@ -442,7 +452,7 @@ package code.google.as3httpclient
 		public function get port():int
 		{
 			return _port_int;
-		};	
+		}	
 		
 		/**
 		 * Gives the baseURL from the url, this could be seen as the server name.<br />
@@ -453,7 +463,7 @@ package code.google.as3httpclient
 		public function get baseURL():String
 		{
 			return _baseURL_str;
-		};
+		}
 		
 		/**
 		 * Gives the extendedURL from the url, this is all extra information besides the
@@ -465,6 +475,6 @@ package code.google.as3httpclient
 		public function get extendedURL():String
 		{
 			return _extendedURL_str;
-		};
-	};
-};
+		}
+	}
+}
