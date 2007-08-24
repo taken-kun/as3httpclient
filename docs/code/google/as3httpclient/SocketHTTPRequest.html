@@ -10,13 +10,13 @@
 <body>
 <script type="text/javascript" language="javascript" src="../../../asdoc.js"></script><script type="text/javascript" language="javascript" src="../../../cookies.js"></script><script type="text/javascript" language="javascript">
 <!--
-				asdocTitle = 'SocketHTTPRequest - AS3HTTPClient documentation';
+				asdocTitle = 'SocketHTTPRequest - API Documentation';
 				var baseRef = '../../../';
 				window.onload = configPage;
 			--></script>
 <table style="display:none" id="titleTable" cellspacing="0" cellpadding="0" class="titleTable">
 <tr>
-<td align="left" class="titleTableTitle">AS3HTTPClient documentation</td><td align="right" class="titleTableTopNav"><a onclick="loadClassListFrame('../../../all-classes.html')" href="../../../package-summary.html">All&nbsp;Packages</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../all-classes.html')" href="../../../class-summary.html">All&nbsp;Classes</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../index-list.html')" href="../../../all-index-A.html">Index</a>&nbsp;|&nbsp;<a href="../../../index.html?code/google/as3httpclient/SocketHTTPRequest.html&amp;code/google/as3httpclient/class-list.html" id="framesLink1">Frames</a><a onclick="parent.location=document.location" href="" style="display:none" id="noFramesLink1">No&nbsp;Frames</a></td><td rowspan="3" align="right" class="titleTableLogo"><img alt="Adobe Logo" title="Adobe Logo" class="logoImage" src="../../../images/logo.jpg"></td>
+<td align="left" class="titleTableTitle">API Documentation</td><td align="right" class="titleTableTopNav"><a onclick="loadClassListFrame('../../../all-classes.html')" href="../../../package-summary.html">All&nbsp;Packages</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../all-classes.html')" href="../../../class-summary.html">All&nbsp;Classes</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../index-list.html')" href="../../../all-index-A.html">Index</a>&nbsp;|&nbsp;<a href="../../../index.html?code/google/as3httpclient/SocketHTTPRequest.html&amp;code/google/as3httpclient/class-list.html" id="framesLink1">Frames</a><a onclick="parent.location=document.location" href="" style="display:none" id="noFramesLink1">No&nbsp;Frames</a></td><td rowspan="3" align="right" class="titleTableLogo"><img alt="Adobe Logo" title="Adobe Logo" class="logoImage" src="../../../images/logo.jpg"></td>
 </tr>
 <tr class="titleTableRow2">
 <td align="left" id="subTitle" class="titleTableSubTitle">Class&nbsp;SocketHTTPRequest</td><td align="right" id="subNav" class="titleTableSubNav"><a href="#propertySummary">Properties</a>&nbsp;| <a href="#methodSummary">Methods</a></td>
@@ -137,7 +137,7 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <a class="signatureLink" href="#SocketHTTPRequest()">SocketHTTPRequest</a>(url_str:String = null)</div>
 <div class="summaryTableDescription">
    Creates a new SocketHTTPRequest.<br />
-   Defeaults the method to URLRequestMethod.GET and contentType to 
+   Defeaults the method to SocketURLRequestMethod.GET and contentType to 
    ContentType.APPLICATION_X_WWW_FORM_URLENCODED.<br />
    <br />
    Note that the SocketHTTPRequest currently only supports urls that start 
@@ -302,7 +302,8 @@ showHideInherited();
 <div class="detailBody">
 <code>method:String</code>&nbsp;&nbsp;[read-write]<p>
    The method of the request. The default method is GET, valid values are 
-   URLRequestMethod.GET and URLRequestMethod.POST.
+   SocketURLRequestMethod.DELETE, SocketURLRequestMethod.GET, SocketURLRequestMethod.HEAD, SocketURLRequestMethod.OPTIONS,
+   URLRequestMethod.POST and SocketURLRequestMethod.TRACE
    
    </p><span class="label">Implementation</span>
 <br>
@@ -323,7 +324,7 @@ showHideInherited();
 <span class="label">See also</span>
 </p>
 <div class="seeAlso">
-<a href="http://livedocs.adobe.com/flex/2/langref/flash/net/URLRequestMethod.html" target="mm_external">flash.net.URLRequestMethod</a>
+<a href="../as3httpclient/SocketHTTPRequest.html#code.google.as3httpclient/SocketURLRequestMethod" target="">code.google.as3httpclient.SocketURLRequestMethod</a>
 </div>
 </div>
 <a name="port"></a>
@@ -380,7 +381,7 @@ showHideInherited();
 <div class="detailBody">
 <code>public function SocketHTTPRequest(url_str:String = null)</code><p>
    Creates a new SocketHTTPRequest.<br />
-   Defeaults the method to URLRequestMethod.GET and contentType to 
+   Defeaults the method to SocketURLRequestMethod.GET and contentType to 
    ContentType.APPLICATION_X_WWW_FORM_URLENCODED.<br />
    <br />
    Note that the SocketHTTPRequest currently only supports urls that start 
