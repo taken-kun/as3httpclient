@@ -305,6 +305,12 @@ package code.google.as3httpclient
 				{
 					_socketData.position -= 2;
 					str += _socketData.readUTFBytes(1);
+					
+					if (_socketData.bytesAvailable < 3)
+					{
+						//not enough bytes are available, lets wait
+						return;
+					};
 				};
 				_contentStart_num = _socketData.position;
 				_contentLength_num = parseInt(str, 16);
@@ -363,7 +369,7 @@ package code.google.as3httpclient
 				var data:ByteArray = _data as ByteArray;
 				_socketData.readBytes(data, data.length, _contentLength_num);
 				
-				if (_socketData.readUTFBytes(2) != HTTP_SEPARATOR)
+				if (_socketData.bytesAvailable > 1 && _socketData.readUTFBytes(2) != HTTP_SEPARATOR)
 				{
 					throw new IOError("SocketURLLoader: could not parse datastream, was expecting CRLF (Carriage return + Line feed).");
 				};
