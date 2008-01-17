@@ -32,9 +32,9 @@ package code.google.as3httpclient
 		 * 
 		 * @see ContentType
 		 */
-		public function SocketHTTPFileRequest(url_str:String = null)
+		public function SocketHTTPFileRequest(url:String = null)
 		{
-			super(url_str);
+			super(url);
 			method = URLRequestMethod.POST;
 			dataField = "Filedata";
 			contentType = ContentType.MULTIPART_FORM_DATA;
@@ -50,7 +50,7 @@ package code.google.as3httpclient
 		 * @throws Error if the content type and method are not ContentType.MULTIPART_FORM_DATA and
 		 * 				 URLRequestMethod.POST
 		 */ 
-		override protected function __constructData(boundary_str:String):ByteArray
+		override protected function constructData(boundary:String):ByteArray
 		{
 			if (!fileName || !dataField || !fileContent)
 			{
@@ -65,10 +65,10 @@ package code.google.as3httpclient
 				{
 					if (data is URLVariables)
 					{
-						var forbiddenFields_obj:Object = new Object();
-						forbiddenFields_obj["Filename"] = true;
-						forbiddenFields_obj["Upload"] = true;
-						forbiddenFields_obj[dataField] = true;
+						var forbiddenFields:Object = new Object();
+						forbiddenFields["Filename"] = true;
+						forbiddenFields["Upload"] = true;
+						forbiddenFields[dataField] = true;
 						
 						var i:String;
 						var value:Object;
@@ -76,10 +76,10 @@ package code.google.as3httpclient
 						for (i in data)
 						{
 							//make sure that the forbidden fields are excluded
-							if (!forbiddenFields_obj.hasOwnProperty(i))
+							if (!forbiddenFields.hasOwnProperty(i))
 							{
 								value = data[i];
-								dataBA.writeUTFBytes("--" + boundary_str + HTTP_SEPARATOR);
+								dataBA.writeUTFBytes("--" + boundary + HTTP_SEPARATOR);
 								dataBA.writeUTFBytes("Content-Disposition: form-data; name=\"" + i + "\"" + HTTP_SEPARATOR);
 								dataBA.writeUTFBytes(HTTP_SEPARATOR);
 								if (value is ByteArray)
@@ -97,26 +97,26 @@ package code.google.as3httpclient
 						throw new ArgumentError("SocketHTTPFileRequest: cannot create data stream when content type is set to MULTIPART_FORM_DATA and data is not of type URLVariables");
 					};				
 				};
-				dataBA.writeUTFBytes("--" + boundary_str + HTTP_SEPARATOR);
+				dataBA.writeUTFBytes("--" + boundary + HTTP_SEPARATOR);
 				dataBA.writeUTFBytes("Content-Disposition: form-data; name=\"Filename\"" + HTTP_SEPARATOR);
 				dataBA.writeUTFBytes(HTTP_SEPARATOR);
 				dataBA.writeUTFBytes(fileName);
 				dataBA.writeUTFBytes(HTTP_SEPARATOR);
 				
-				dataBA.writeUTFBytes("--" + boundary_str + HTTP_SEPARATOR);
+				dataBA.writeUTFBytes("--" + boundary + HTTP_SEPARATOR);
 				dataBA.writeUTFBytes("Content-Disposition: form-data; name=\"" + dataField + "\"; filename=\"" + fileName + "\"" + HTTP_SEPARATOR);
 				dataBA.writeUTFBytes("Content-Type: application/octet-stream" + HTTP_SEPARATOR);
 				dataBA.writeUTFBytes(HTTP_SEPARATOR);
 				dataBA.writeBytes(fileContent, 0, fileContent.length);
 				dataBA.writeUTFBytes(HTTP_SEPARATOR);
 				
-				dataBA.writeUTFBytes("--" + boundary_str + HTTP_SEPARATOR);
+				dataBA.writeUTFBytes("--" + boundary + HTTP_SEPARATOR);
 				dataBA.writeUTFBytes("Content-Disposition: form-data; name=\"Upload\"" + HTTP_SEPARATOR);
 				dataBA.writeUTFBytes(HTTP_SEPARATOR);
 				dataBA.writeUTFBytes("Submit Query");
 				dataBA.writeUTFBytes(HTTP_SEPARATOR);
 				
-				dataBA.writeUTFBytes("--" + boundary_str + "--" + HTTP_SEPARATOR);
+				dataBA.writeUTFBytes("--" + boundary + "--" + HTTP_SEPARATOR);
 			} else
 			{
 				throw new Error("SocketHTTPFileRequest: cannot construct data if contentType is not set to ContentType.MULTIPART_FORM_DATA or method is not set to URLRequestMethod.POST");
