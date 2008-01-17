@@ -9,53 +9,53 @@ package code.google.as3httpclient
 	 */
 	public class HTTPResponseHeader
 	{
-		private var _protocol_str:String;
-		private var _status_int:int;
-		private var _message_str:String;
-		private var _contentLength_num:Number;
+		private var _protocol:String;
+		private var _status:int;
+		private var _message:String;
+		private var _contentLength:Number;
 		
-		private var _headers_arr:Array;
-		private var _headers_obj:Object;
+		private var _headers:Array;
+		private var _headerObject:Object;
 		
 		/**
-		 * @param completeHeader_str This is the complete HTTP response header.
+		 * @param completeHeader This is the complete HTTP response header.
 		 */
-		public function HTTPResponseHeader(completeHeader_str:String)
+		public function HTTPResponseHeader(completeHeader:String)
 		{
-			_headers_arr = new Array();
-			_headers_obj = new Object();
+			_headers = new Array();
+			_headerObject = new Object();
 			
-			_parseHeader(completeHeader_str);
+			parseHeader(completeHeader);
 		};
 		
-		private function _parseHeader(completeHeader_str:String):void
+		private function parseHeader(completeHeader:String):void
 		{
-			var headers_arr:Array = completeHeader_str.split(HTTP_SEPARATOR);
+			var headers:Array = completeHeader.split(HTTP_SEPARATOR);
 			
-			var info_str:String = headers_arr.shift() as String;
-			var info_arr:Array = info_str.split(" ");
+			var info:String = headers.shift() as String;
+			var infoArray:Array = info.split(" ");
 			
-			_protocol_str = info_arr[0];
-			_status_int = parseInt(info_arr[1]);
-			if (info_arr.length > 2)
+			_protocol = infoArray[0];
+			_status = parseInt(infoArray[1]);
+			if (infoArray.length > 2)
 			{
-				_message_str = info_arr[2];
+				_message = infoArray[2];
 			};
 			
-			var header_str:String;
-			var name_str:String;
-			var value_str:String;
+			var headerText:String;
+			var name:String;
+			var value:String;
 			var header:URLRequestHeader
-			var headerContent_arr:Array;
+			var headerContent:Array;
 			
-			for each (header_str in headers_arr)
+			for each (headerText in headers)
 			{
-				headerContent_arr = header_str.split(": ");
-				name_str = headerContent_arr[0];
-				value_str = headerContent_arr[1];
-				header = new URLRequestHeader(name_str, value_str);
-				_headers_arr.push(header);
-				_headers_obj[name_str] = value_str;
+				headerContent = headerText.split(": ");
+				name = headerContent[0];
+				value = headerContent[1];
+				header = new URLRequestHeader(name, value);
+				_headers.push(header);
+				_headerObject[name] = value;
 			};
 		};
 		
@@ -64,7 +64,7 @@ package code.google.as3httpclient
 		 */
 		public function get protocol():String
 		{
-			return _protocol_str;
+			return _protocol;
 		};
 		
 		/**
@@ -72,7 +72,7 @@ package code.google.as3httpclient
 		 */
 		public function get status():int
 		{
-			return _status_int;
+			return _status;
 		};
 		
 		/**
@@ -82,7 +82,7 @@ package code.google.as3httpclient
 		 */
 		public function get headers():Array
 		{
-			return _headers_arr;
+			return _headers;
 		};
 		
 		/**
@@ -94,7 +94,7 @@ package code.google.as3httpclient
 		 */
 		public function get headerObject():Object
 		{
-			return _headers_obj;
+			return _headerObject;
 		};
 		
 		/**
@@ -102,7 +102,7 @@ package code.google.as3httpclient
 		 */
 		public function get message():String
 		{
-			return _message_str;
+			return _message;
 		};
 	};
 };

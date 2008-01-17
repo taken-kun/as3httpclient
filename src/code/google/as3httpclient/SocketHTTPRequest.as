@@ -80,15 +80,15 @@ package code.google.as3httpclient
 		/*
 			Getters / setters
 		*/
-		private var _url_str:String;
-		private var _method_str:String;
+		private var _url:String;
+		private var _method:String;
 		
 		/*
 			Getters
 		*/
-		private var _port_int:int;
-		private var _baseURL_str:String;
-		private var _extendedURL_str:String;
+		private var _port:int;
+		private var _baseURL:String;
+		private var _extendedURL:String;
 
 		private var _userAgent:String = "as3httpclient";
 		
@@ -99,22 +99,22 @@ package code.google.as3httpclient
 		 * <br />
 		 * Note that the SocketHTTPRequest currently only supports urls that start 
 		 * with http://.<br />
-		 * @param url_str If given it will be passed to the url setter.
+		 * @param url If given it will be passed to the url setter.
 		 */
-		public function SocketHTTPRequest(url_str:String = null)
+		public function SocketHTTPRequest(url:String = null)
 		{
 			requestHeaders = new Array();
 			contentType = ContentType.APPLICATION_X_WWW_FORM_URLENCODED;
 			method = SocketURLRequestMethod.GET;
-			if (url_str)
+			if (url)
 			{
-				url = url_str;
+				url = url;
 			}
 		}
 		
-		private function _parseURL():void
+		private function parseURL():void
 		{
-			var url_str:String = _url_str;
+			var url:String = _url;
 
 			/*
 				In the code below the url is parsed. This should be replaced by a 
@@ -122,84 +122,84 @@ package code.google.as3httpclient
 			
 				We currently only support requests that start with http://
 			*/
-			if (url_str.substr(0, 7) == "http://")
+			if (url.substr(0, 7) == "http://")
 			{
 				/*
 					ignore authentication entry, use request headers to apply authentication
 					In a future version we might decide to automatically convert these entries
 					into an authentication header
 				*/
-				var authenticationEnd_int:int = url_str.indexOf("@");
+				var authenticationEnd:int = url.indexOf("@");
 				
-				var hasAuthentication_bool:Boolean;
-				if (authenticationEnd_int > -1)
+				var hasAuthentication:Boolean;
+				if (authenticationEnd > -1)
 				{
-					hasAuthentication_bool = true;
+					hasAuthentication = true;
 				} else
 				{
-					authenticationEnd_int = 7;
+					authenticationEnd = 7;
 				}
 				
 				/*
 					Find the start of the port
 				*/
-				var portStart_int:int = url_str.indexOf(":", authenticationEnd_int);
-				var hasPort_bool:Boolean;
-				var portEnd_int:int;
+				var portStart:int = url.indexOf(":", authenticationEnd);
+				var hasPort:Boolean;
+				var portEnd:int;
 				
-				if (portStart_int > -1)
+				if (portStart > -1)
 				{
 					/*
 						port found, extract it
 					*/
-					hasPort_bool = true;
-					portEnd_int = url_str.indexOf("/", portStart_int);
-					if (portEnd_int == -1)
+					hasPort = true;
+					portEnd = url.indexOf("/", portStart);
+					if (portEnd == -1)
 					{
-						portEnd_int = url_str.length;
+						portEnd = url.length;
 					}
-					_port_int = parseInt(url_str.substring(portStart_int + 1, portEnd_int));
+					_port = parseInt(url.substring(portStart + 1, portEnd));
 				}
 				
 				/*
-					The next if statement will extract the base url and set the extendedURLStart_int
+					The next if statement will extract the base url and set the extendedURLStart
 					variable
 				*/
-				var extendedURLStart_int:int;
-				if (hasAuthentication_bool && hasPort_bool)
+				var extendedURLStart:int;
+				if (hasAuthentication && hasPort)
 				{
-					_baseURL_str = url_str.substring(authenticationEnd_int + 1, portStart_int);
-					extendedURLStart_int = portEnd_int;
-				} else if (hasAuthentication_bool)
+					_baseURL = url.substring(authenticationEnd + 1, portStart);
+					extendedURLStart = portEnd;
+				} else if (hasAuthentication)
 				{
-					extendedURLStart_int = url_str.indexOf("/", authenticationEnd_int);
-					if (extendedURLStart_int == -1)
+					extendedURLStart = url.indexOf("/", authenticationEnd);
+					if (extendedURLStart == -1)
 					{
-						extendedURLStart_int = url_str.length;
+						extendedURLStart = url.length;
 					}
 					
-					_baseURL_str = url_str.substring(authenticationEnd_int + 1, extendedURLStart_int);
-				} else if (hasPort_bool)
+					_baseURL = url.substring(authenticationEnd + 1, extendedURLStart);
+				} else if (hasPort)
 				{
-					_baseURL_str = url_str.substring(7, portStart_int);
-					extendedURLStart_int = portEnd_int;
+					_baseURL = url.substring(7, portStart);
+					extendedURLStart = portEnd;
 				} else
 				{
-					extendedURLStart_int = url_str.indexOf("/", 7);
-					if (extendedURLStart_int == -1)
+					extendedURLStart = url.indexOf("/", 7);
+					if (extendedURLStart == -1)
 					{
-						extendedURLStart_int = url_str.length;
+						extendedURLStart = url.length;
 					}
 					
-					_baseURL_str = url_str.substring(7, extendedURLStart_int);				
+					_baseURL = url.substring(7, extendedURLStart);				
 				}
 				
 				/* 
-					if the extendedURLStart_int is smaller then the total url, get it from the url
+					if the extendedURLStart is smaller then the total url, get it from the url
 				*/
-				if (extendedURLStart_int > -1 && extendedURLStart_int < url_str.length)
+				if (extendedURLStart > -1 && extendedURLStart < url.length)
 				{
-					_extendedURL_str = url_str.substr(extendedURLStart_int);
+					_extendedURL = url.substr(extendedURLStart);
 				}
 			} else
 			{
@@ -216,7 +216,7 @@ package code.google.as3httpclient
 		public function constructRequest():ByteArray
 		{
 			/*
-				If the method is POST, call both __constructHeader and __constrcutData methods.
+				If the method is POST, call both constructHeader and __constrcutData methods.
 			*/
 			
 			var methodIsPost_bool:Boolean = (method == SocketURLRequestMethod.POST) || (method == SocketURLRequestMethod.PUT);
@@ -228,20 +228,20 @@ package code.google.as3httpclient
 					Create a boundary variable which might be needed for the MultiPart
 					content type.
 				*/
-				var boundary_str:String = "------------Ij5Ef1Ef1Ij5Ij5cH2ei4gL6KM7KM7";
+				var boundary:String = "------------Ij5Ef1Ef1Ij5Ij5cH2ei4gL6KM7KM7";
 				
-				var dataBA:ByteArray = __constructData(boundary_str);
-				var contentLength_num:Number = dataBA.length;
+				var dataBA:ByteArray = constructData(boundary);
+				var contentLength:Number = dataBA.length;
 				if (contentType == ContentType.MULTIPART_FORM_DATA)
 				{
-					contentLength_num -= 4;
+					contentLength -= 4;
 				}
-				requestBA = __constructHeader(contentLength_num, boundary_str);
+				requestBA = constructHeader(contentLength, boundary);
 				//add data
 				requestBA.writeBytes(dataBA, 0, dataBA.length);
 			} else
 			{
-				requestBA = __constructHeader(0, null);
+				requestBA = constructHeader(0, null);
 			}
 			
 			return requestBA;
@@ -250,44 +250,44 @@ package code.google.as3httpclient
 		/**
 		 * This method constructs the header of the request.
 		 * 
-		 * @param contentLength_num The length of the content.
-		 * @param boundary_str The boundary which is only used if contentType is ContentType.MULTIPART_FORM_DATA
+		 * @param contentLength The length of the content.
+		 * @param boundary The boundary which is only used if contentType is ContentType.MULTIPART_FORM_DATA
 		 */
-		protected function __constructHeader(contentLength_num:Number, boundary_str:String):ByteArray
+		protected function constructHeader(contentLength:Number, boundary:String):ByteArray
 		{
-			var header_str:String = "";
+			var header:String = "";
 			
 			/*
 				Add data to the extended URL if its given and the method is GET
 			*/
-			var extendedUrl_str:String = extendedURL ? extendedURL : "/";
+			var extendedUrl:String = extendedURL ? extendedURL : "/";
 			
 			if ((method == SocketURLRequestMethod.GET || method == SocketURLRequestMethod.HEAD || method == SocketURLRequestMethod.DELETE) && data)
 			{
-				if (extendedUrl_str.indexOf("?") == -1)
+				if (extendedUrl.indexOf("?") == -1)
 				{
-					extendedUrl_str += "?";
+					extendedUrl += "?";
 				}
 				
-				extendedUrl_str += data.toString();
+				extendedUrl += data.toString();
 			}
 			
 			/*
 				Create the first line of the header
 			*/
-			header_str += method + " " + extendedUrl_str + " HTTP/1.1" + HTTP_SEPARATOR;
+			header += method + " " + extendedUrl + " HTTP/1.1" + HTTP_SEPARATOR;
 
 			/*
 				Add user-agent header
 			*/
-			header_str += "User-Agent: " + _userAgent + HTTP_SEPARATOR;
+			header += "User-Agent: " + _userAgent + HTTP_SEPARATOR;
 
 			/*
 				If a content length is given, add the request header for it
 			*/
-			if (contentLength_num)
+			if (contentLength)
 			{
-				header_str += "Content-Length: " + contentLength_num + HTTP_SEPARATOR;
+				header += "Content-Length: " + contentLength + HTTP_SEPARATOR;
 			}
 			
 			/*
@@ -295,7 +295,7 @@ package code.google.as3httpclient
 			*/
 			if (contentType)
 			{
-				header_str += "Content-Type: " + contentType;
+				header += "Content-Type: " + contentType;
 			}
 			
 			/*
@@ -303,9 +303,9 @@ package code.google.as3httpclient
 			*/
 			if (contentType == ContentType.MULTIPART_FORM_DATA)
 			{
-				header_str += "; boundary=" + boundary_str;
+				header += "; boundary=" + boundary;
 			}
-			header_str += HTTP_SEPARATOR;
+			header += HTTP_SEPARATOR;
 
 			/*
 				Add additional request headers
@@ -315,27 +315,27 @@ package code.google.as3httpclient
 				var requestHeader:URLRequestHeader;
 				for each (requestHeader in requestHeaders)
 				{
-					header_str += requestHeader.name + ": " + requestHeader.value + HTTP_SEPARATOR;
+					header += requestHeader.name + ": " + requestHeader.value + HTTP_SEPARATOR;
 				}
 			}
 			
 			/*
 				Add the host of the request
 			*/
-			var serverURL_str:String = baseURL;
+			var serverURL:String = baseURL;
 			if (port)
 			{
-				serverURL_str += ":" + port;
+				serverURL += ":" + port;
 			}			
-			header_str += "Host: " + serverURL_str + HTTP_SEPARATOR;
+			header += "Host: " + serverURL + HTTP_SEPARATOR;
 			
 			/*
 				End the header
 			*/
-			header_str += HTTP_SEPARATOR;
+			header += HTTP_SEPARATOR;
 			
 			var headerBA:ByteArray = new ByteArray();
-			headerBA.writeUTFBytes(header_str);
+			headerBA.writeUTFBytes(header);
 			
 			return headerBA;
 		}
@@ -346,7 +346,7 @@ package code.google.as3httpclient
 		 * 
 		 * @see #data
 		 */
-		protected function __constructData(boundary_str:String):ByteArray
+		protected function constructData(boundary:String):ByteArray
 		{
 			var dataBA:ByteArray = new ByteArray();
 			
@@ -378,7 +378,7 @@ package code.google.as3httpclient
 							for (i in data)
 							{
 								value = data[i];
-								dataBA.writeUTFBytes("--" + boundary_str + HTTP_SEPARATOR);
+								dataBA.writeUTFBytes("--" + boundary + HTTP_SEPARATOR);
 								dataBA.writeUTFBytes("Content-Disposition: form-data; name=\"" + i + "\"" + HTTP_SEPARATOR);
 								dataBA.writeUTFBytes(HTTP_SEPARATOR);
 								if (value is ByteArray)
@@ -390,7 +390,7 @@ package code.google.as3httpclient
 								}
 								dataBA.writeUTFBytes(HTTP_SEPARATOR);
 							}							
-							dataBA.writeUTFBytes("--" + boundary_str + "--" + HTTP_SEPARATOR);
+							dataBA.writeUTFBytes("--" + boundary + "--" + HTTP_SEPARATOR);
 						} else
 						{
 							throw new ArgumentError("SocketHTTPRequest: cannot create data stream when content type is set to MULTIPART_FORM_DATA and data is not of type URLVariables");
@@ -410,13 +410,13 @@ package code.google.as3httpclient
 		 */
 		public function get url():String
 		{
-			return _url_str;
+			return _url;
 		}
 		
-		public function set url(url_str:String):void
+		public function set url(url:String):void
 		{
-			_url_str = url_str;
-			_parseURL();
+			_url = url;
+			parseURL();
 		}
 		
 		/**
@@ -430,16 +430,16 @@ package code.google.as3httpclient
 		 */
 		public function get method():String
 		{
-			return _method_str;
+			return _method;
 		}
 		
-		public function set method(method_str:String):void
+		public function set method(value:String):void
 		{
-			if (method_str == SocketURLRequestMethod.GET || method_str == SocketURLRequestMethod.POST
-				|| method_str == SocketURLRequestMethod.PUT || SocketURLRequestMethod.DELETE || SocketURLRequestMethod.HEAD
-				|| method_str == SocketURLRequestMethod.OPTIONS || method_str == SocketURLRequestMethod.TRACE)			
+			if (value == SocketURLRequestMethod.GET || value == SocketURLRequestMethod.POST
+				|| value == SocketURLRequestMethod.PUT || SocketURLRequestMethod.DELETE || SocketURLRequestMethod.HEAD
+				|| value == SocketURLRequestMethod.OPTIONS || value == SocketURLRequestMethod.TRACE)			
 			{
-				_method_str = method_str;
+				_method = value;
 			} else
 			{
 				throw new ArgumentError("SocketHTTPRequest: invalid method given, use values stored in the SocketURLRequestMethod class");
@@ -451,7 +451,7 @@ package code.google.as3httpclient
 		 */
 		public function get port():int
 		{
-			return _port_int;
+			return _port;
 		}	
 		
 		/**
@@ -462,7 +462,7 @@ package code.google.as3httpclient
 		 */
 		public function get baseURL():String
 		{
-			return _baseURL_str;
+			return _baseURL;
 		}
 		
 		/**
@@ -474,7 +474,7 @@ package code.google.as3httpclient
 		 */
 		public function get extendedURL():String
 		{
-			return _extendedURL_str;
+			return _extendedURL;
 		}
 	}
 }
