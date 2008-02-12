@@ -12,6 +12,7 @@ package code.google.as3httpclient
 	import flash.events.HTTPStatusEvent;
 	import flash.net.URLVariables;
 	import flash.errors.IOError;
+	import code.google.as3httpclient.HTTP_SEPARATOR;
 
 	/**
 	 * Dispatched when the socket is closed.
@@ -223,14 +224,23 @@ package code.google.as3httpclient
 				
 				var header_obj:Object = header.headerObject;
 				
+				contentStart = headerEndIndex + 4;
+				
 				if (header_obj.hasOwnProperty("Content-Length"))
 				{
 					contentLength = Number(header_obj["Content-Length"]);
 				} else if (header_obj.hasOwnProperty("Transfer-Encoding") && header_obj["Transfer-Encoding"] == "chunked")
 				{
 					contentIsChunked = true;
+				} else
+				{
+					/*
+						no Content-Length was specified and the data is not chunked, 
+						we will need to set the position to the actual content start
+						and guess the content length during gathering
+					*/
+					socketData.position = contentStart;
 				};
-				contentStart = headerEndIndex + 4;
 			};
 			
 		};
@@ -244,7 +254,23 @@ package code.google.as3httpclient
 		 */
 		private function gatherData():void
 		{
-			if (contentLength > socketData.bytesAvailable)
+			if (isNaN(contentLength))
+			{
+				/*
+					The length of the content is unknown. Check if the last bytes is a separator.
+				*/
+				var position:int = socketData.position;
+				var stringData:String = socketData.readUTFBytes(socketData.bytesAvailable);
+				
+				socketData.position = position;
+				
+				if (stringData.substr(-2) == HTTP_SEPARATOR)
+				{
+					contentLength = socketData.bytesAvailable - 2;
+				};
+			};
+			
+			if (isNaN(contentLength) || contentLength > socketData.bytesAvailable)
 			{
 				//waiting for more data
 				var progressEvent:ProgressEvent = new ProgressEvent(ProgressEvent.PROGRESS, false, false, socketData.bytesAvailable, contentLength);
